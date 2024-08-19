@@ -25,9 +25,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 // 8. Build NavigationCard: 100%!
 // 9. Set up Directions API: Done!
 // 10. Build NavFavourites: Done! Challenge: Make a shortcut using Favorites
-// 11. Implement Time Travel Calculation
-// 12. Implement Price Calulation
-// 13. Build Menu Button
+// 11. Implement Time Travel Calculation: Done
+// 12. Implement Price Calulation: Done
+// 13. Build Menu Button: Done
 
 export default function App() {
   const Stack = createStackNavigator();
