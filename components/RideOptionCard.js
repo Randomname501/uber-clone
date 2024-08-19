@@ -1,23 +1,23 @@
+import React, { useState } from "react";
 import {
-  View,
-  Text,
   SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
   TouchableOpacity,
   FlatList,
   Image,
-  StyleSheet,
 } from "react-native";
-import React, { useState } from "react";
+import tw from "twrnc";
 import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { selectTravelTimeInformation } from "../slices/navSlice";
-import tw from "twrnc";
 
 const data = [
   {
     id: "Uber-X-123",
-    title: "Uber X",
+    title: "UberX",
     multiplier: 1,
     image: "https://links.papareact.com/3pn",
   },
@@ -35,26 +35,25 @@ const data = [
   },
 ];
 
-const SURGE_CHARGE_PRICE = 1.5;
+//This refers to Uber's surge pricing, which increases during times of high user demand in an area
+const SURGE_CHARGE_RATE = 1.5;
 
-const RideOptionCard = () => {
+const RideOptionsCard = () => {
   const navigation = useNavigation();
   const [selected, setSelected] = useState(null);
-  const travelTimeInfomation = useSelector(selectTravelTimeInformation);
+  const travelTimeInformation = useSelector(selectTravelTimeInformation);
+
   return (
     <SafeAreaView style={tw`bg-white flex-grow`}>
       <View>
         <TouchableOpacity
-          onPress={() => {
-            console.log("yes");
-            navigation.navigate("NavigateCard");
-          }}
-          style={tw`absolute top-3 left-5`}
+          onPress={() => navigation.navigate("NavigateCard")}
+          style={tw`absolute top-3 left-5 z-50 p-3 rounded-full`}
         >
-          <Icon name="chevron-left" type="font-awesome" size={20} />
+          <Icon name="chevron-left" type="fontawesome" />
         </TouchableOpacity>
-        <Text style={tw`text-center text-xl py-5`}>
-          Pick a Ride - {travelTimeInfomation?.distance?.text}
+        <Text style={tw`text-center py-5 text-xl`}>
+          Select a Ride - {travelTimeInformation?.distance?.text}
         </Text>
       </View>
 
@@ -63,16 +62,10 @@ const RideOptionCard = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item: { id, title, multiplier, image }, item }) => (
           <TouchableOpacity
-            style={tw`flex-row justify-between item-center px-10 ${
+            onPress={() => setSelected(item)}
+            style={tw`flex-row justify-between items-center px-10 ${
               id === selected?.id && "bg-gray-200"
             }`}
-            onPress={() => {
-              if (!selected) {
-                setSelected(item);
-              } else {
-                setSelected(null);
-              }
-            }}
           >
             <Image
               style={{
@@ -82,17 +75,17 @@ const RideOptionCard = () => {
               }}
               source={{ uri: image }}
             />
-            <View>
+            <View style={tw`-ml-6`}>
               <Text style={tw`text-xl font-semibold`}>{title}</Text>
-              <Text>{travelTimeInfomation?.duration?.text} Travel Time</Text>
+              <Text>{travelTimeInformation?.duration?.text} Travel Time</Text>
             </View>
-            <Text style={tw`text-xl text-center`}>
-              {new Intl.NumberFormat("en-gb", {
+            <Text style={tw`text-xl`}>
+              {new Intl.NumberFormat("en-us", {
                 style: "currency",
                 currency: "USD",
               }).format(
-                (travelTimeInfomation?.duration?.value *
-                  SURGE_CHARGE_PRICE *
+                (travelTimeInformation?.duration.value *
+                  SURGE_CHARGE_RATE *
                   multiplier) /
                   100
               )}
@@ -100,6 +93,7 @@ const RideOptionCard = () => {
           </TouchableOpacity>
         )}
       />
+
       <View style={tw`mt-auto border-t border-gray-200`}>
         <TouchableOpacity
           disabled={!selected}
@@ -114,6 +108,5 @@ const RideOptionCard = () => {
   );
 };
 
-export default RideOptionCard;
-
+export default RideOptionsCard;
 const styles = StyleSheet.create({});

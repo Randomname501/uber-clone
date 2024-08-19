@@ -21,7 +21,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 // 4. Set up Google AutoComplete: Done!
 // 5. Build MapScreen: Done!
 // 6. Build Map: Done!
-// 7. Build RideOptionsCard: 50%! Fix the Price being clipped off
+// 7. Build RideOptionsCard: 100%!
 // 8. Build NavigationCard: 100%!
 // 9. Set up Directions API: Done!
 // 10. Build NavFavourites: Done! Challenge: Make a shortcut using Favorites
