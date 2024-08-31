@@ -1,3 +1,4 @@
+// File path: /NavFavourites.js
 import {
   StyleSheet,
   Text,
@@ -8,6 +9,9 @@ import {
 import React from "react";
 import { Icon } from "react-native-elements";
 import tw from "twrnc";
+import { useDispatch, useSelector } from "react-redux";
+import { setDestination, setOrigin, selectOrigin } from "../slices/navSlice";
+import { useNavigation } from "@react-navigation/native";
 
 const data = [
   {
@@ -30,16 +34,44 @@ const data = [
   },
 ];
 
-const NavFavourites = () => {
+const NavFavorites = ({ shouldSetOrigin }) => {
+  const dispatch = useDispatch();
+  const origin = useSelector(selectOrigin);
+  const navigation = useNavigation();
+
   return (
     <FlatList
-      data={data}
+      data={data.filter(
+        // Checks to see if Home or Work is already selected
+        (item) => shouldSetOrigin || origin?.location !== item.destination
+      )}
       keyExtractor={(item) => item.id}
-      ItemSeparatorComponent={() => {
-        <View style={(tw`bg-gray-200`, { height: 0.5 })} />;
-      }}
-      renderItem={({ item: { location, destination, icon } }) => (
-        <TouchableOpacity style={tw`flex-row items-center p-5`}>
+      ItemSeparatorComponent={() => (
+        <View style={[tw`bg-gray-200`, { height: 0.5 }]} />
+      )}
+      renderItem={({ item: { icon, location, destination } }) => (
+        <TouchableOpacity
+          style={tw`flex-row items-center py-5`}
+          onPress={() => {
+            if (shouldSetOrigin) {
+              dispatch(
+                setOrigin({
+                  location: destination,
+                  description: location,
+                })
+              );
+              navigation.navigate("MapScreen");
+            } else {
+              dispatch(
+                setDestination({
+                  location: destination,
+                  description: location,
+                })
+              );
+              navigation.navigate("MapScreen");
+            }
+          }}
+        >
           <Icon
             style={tw`mr-4 rounded-full bg-gray-300 p-3`}
             name={icon}
@@ -57,6 +89,6 @@ const NavFavourites = () => {
   );
 };
 
-export default NavFavourites;
+export default NavFavorites;
 
 const styles = StyleSheet.create({});

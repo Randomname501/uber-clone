@@ -22,32 +22,34 @@ const NavigateCard = () => {
     <SafeAreaView style={tw`bg-white flex-1`}>
       <Text style={tw`text-center py-5 text-xl`}>Good Morning User</Text>
       <View style={tw`border-t border-gray-200 flex-shrink`}>
-        <GooglePlacesAutocomplete
-          placeholder="Where to?"
-          debounce={400}
-          styles={toInputBoxStyles}
-          enablePoweredByContainer={false}
-          nearbyPlacesAPI="GooglePlacesSearch"
-          fetchDetails={true}
-          returnKeyType={"search"}
-          minLength={2}
-          query={{
-            key: GOOGLE_MAPS_APIKEY,
-            language: "en",
-          }}
-          onPress={(data, details = null) => {
-            dispatch(
-              setDestination({
-                location: details.geometry.location,
-                description: data.description,
-              })
-            );
+        <View>
+          <GooglePlacesAutocomplete
+            placeholder="Where to?"
+            debounce={400}
+            styles={toInputBoxStyles}
+            enablePoweredByContainer={false}
+            nearbyPlacesAPI="GooglePlacesSearch"
+            fetchDetails={true}
+            returnKeyType={"search"}
+            minLength={2}
+            query={{
+              key: GOOGLE_MAPS_APIKEY,
+              language: "en",
+            }}
+            onPress={(data, details = null) => {
+              dispatch(
+                setDestination({
+                  location: details.geometry.location,
+                  description: data.description,
+                })
+              );
 
-            navigation.navigate("RideOptionsCard");
-          }}
-        />
+              navigation.navigate("RideOptionsCard");
+            }}
+          />
+        </View>
+        <NavFavourites />
       </View>
-      <NavFavourites />
       <View
         style={tw`flex-row bg-white justify-evenly py-2 mt-auto border-t border-gray-100`}
       >
